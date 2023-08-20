@@ -1,0 +1,5 @@
+INSERT INTO SURVEY (USER_ID, ID, CREATED_AT, STATUS, TITLE)
+VALUES (1, 1, 'today', 'done', 'ankieta1');
+
+INSERT INTO SURVEY (USER_ID, ID, CREATED_AT, STATUS, TITLE)
+VALUES (1, 2, 'today', 'notdone', 'ankieta2');
