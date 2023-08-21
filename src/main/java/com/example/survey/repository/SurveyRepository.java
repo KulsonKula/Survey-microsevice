@@ -11,5 +11,5 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
     List<Survey> findByUser_id(long id);
 
-    List<Survey> findById(long id);
+    Survey findById(long id);
 }

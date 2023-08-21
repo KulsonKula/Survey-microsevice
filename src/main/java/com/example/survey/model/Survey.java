@@ -9,7 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table
 public class Survey {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
     private String title;
@@ -28,13 +28,14 @@ public class Survey {
     public Survey() {
     }
 
-    public Survey(int id, String title, String status, String created_at, Users user) {
-        this.id = id;
+    public Survey(String title, String status, Users user) {
+
+        created_at = "Do implementacji";
         this.title = title;
         this.status = status;
-        this.created_at = created_at;
         this.user = user;
     }
+
 
     public int getId() {
         return id;

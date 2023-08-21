@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Question {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
