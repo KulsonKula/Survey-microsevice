@@ -1,5 +1,6 @@
 package com.example.survey.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -10,7 +11,7 @@ public class Question {
 
     @Id
     @GeneratedValue
-    private long Id;
+    private long id;
 
     @Column
     private String text;
@@ -21,6 +22,7 @@ public class Question {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "survey_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Survey survey;
 
 
@@ -28,18 +30,18 @@ public class Question {
     }
 
     public Question(long id, String text, String type, Survey survey) {
-        Id = id;
+        this.id = id;
         this.text = text;
         this.type = type;
         this.survey = survey;
     }
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getText() {

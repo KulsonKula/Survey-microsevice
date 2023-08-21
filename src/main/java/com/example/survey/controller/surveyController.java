@@ -24,8 +24,6 @@ public class surveyController {
     @GetMapping("/{user_id}/survey/{id}")
     public ResponseEntity<List<Survey>> getSurveyById(@PathVariable int id, @PathVariable String user_id) {
         List<Survey> survey = surveyRepository.findById(id);
-
         return new ResponseEntity<>(survey, HttpStatus.OK);
-
     }
 }
