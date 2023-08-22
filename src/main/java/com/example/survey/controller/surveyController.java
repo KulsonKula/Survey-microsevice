@@ -14,11 +14,12 @@ import java.util.List;
 public class surveyController {
 
     private final SurveyRepository surveyRepository;
+    private final UsersRepository usersRepository;
 
 
     public surveyController(SurveyRepository surveyRepository, UsersRepository usersRepository) {
         this.surveyRepository = surveyRepository;
-
+        this.usersRepository = usersRepository;
     }
 
     @GetMapping("/{user_id}/survey/")
@@ -45,11 +46,15 @@ public class surveyController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-// TODO
-//    @PostMapping("/{user_id}//survey")
-//    public ResponseEntity<Survey> createSurvey(@RequestBody Survey survey, @PathVariable int user_id) {
-//        Survey newSurvey = surveyRepository.save(new Survey(survey.getTitle(), survey.getStatus(), usersRepository.findById((long) user_id));
-//        return new ResponseEntity<>(newSurvey, HttpStatus.CREATED);
-//    }
+
+    @PostMapping("/{user_id}//survey")
+    public ResponseEntity<Survey> createSurvey(@RequestBody Survey surveyRequest, @PathVariable long user_id) {
+        
+        if (usersRepository.findById(user_id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        surveyRequest.setUser(usersRepository.findById(user_id));
+        return new ResponseEntity<>(surveyRequest, HttpStatus.CREATED);
+    }
 
 }
