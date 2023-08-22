@@ -47,10 +47,10 @@ public class surveyController {
     }
 
 
-    @PostMapping("/{user_id}//survey")
+    @PutMapping("/{user_id}/survey")
     public ResponseEntity<Survey> createSurvey(@RequestBody Survey surveyRequest, @PathVariable long user_id) {
-        System.out.print("test");
         surveyRequest.setUser(usersRepository.findById(user_id));
+        surveyRequest.setId(null);
         surveyRepository.save(surveyRequest);
         return new ResponseEntity<>(surveyRequest, HttpStatus.CREATED);
     }
