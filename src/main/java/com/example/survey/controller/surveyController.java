@@ -49,12 +49,9 @@ public class surveyController {
 
     @PostMapping("/{user_id}//survey")
     public ResponseEntity<Survey> createSurvey(@RequestBody Survey surveyRequest, @PathVariable long user_id) {
-        
-        if (usersRepository.findById(user_id).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        System.out.print("test");
         surveyRequest.setUser(usersRepository.findById(user_id));
+        surveyRepository.save(surveyRequest);
         return new ResponseEntity<>(surveyRequest, HttpStatus.CREATED);
     }
-
 }

@@ -7,8 +7,7 @@ import java.util.List;
 
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
-    List<Survey> findByTitle(String title);
-
+    
     List<Survey> findByUser_id(long id);
 
     Survey findById(long id);

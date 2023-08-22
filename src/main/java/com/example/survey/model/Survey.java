@@ -28,14 +28,12 @@ public class Survey {
     public Survey() {
     }
 
-    public Survey(String title, String status, Users user) {
-
-        created_at = "Do implementacji";
+    public Survey(String title, String status, String created_at, Users user) {
         this.title = title;
         this.status = status;
+        this.created_at = created_at;
         this.user = user;
     }
-
 
     public int getId() {
         return id;
@@ -76,4 +74,5 @@ public class Survey {
     public void setUser(Users user) {
         this.user = user;
     }
+
 }
