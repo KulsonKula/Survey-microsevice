@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.sql.Date;
+
 @Entity
 @Table
 public class Survey {
@@ -18,7 +20,7 @@ public class Survey {
     private String status;
 
     @Column
-    private String created_at;
+    private Date created_at;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -28,7 +30,7 @@ public class Survey {
     public Survey() {
     }
 
-    public Survey(String title, String status, String created_at, Users user) {
+    public Survey(String title, String status, Date created_at, Users user) {
         this.title = title;
         this.status = status;
         this.created_at = created_at;
@@ -59,11 +61,11 @@ public class Survey {
         this.status = status;
     }
 
-    public String getCreated_at() {
+    public Date getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(String created_at) {
+    public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 

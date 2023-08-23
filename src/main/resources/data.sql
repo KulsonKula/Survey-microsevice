@@ -2,8 +2,8 @@ INSERT INTO USERS (ID, USERNAME, PASSWORD)
 VALUES (11, 'Qlson', 'polslpolsl');
 
 INSERT INTO SURVEY (USER_ID, ID, CREATED_AT, STATUS, TITLE)
-VALUES (11, 11, 'today', 'done', 'Ocena laboratorium podstaw miernictwa'),
-       (11, 12, 'today', 'notdone', 'Ocena laboratorium metod numerycznych');
+VALUES (11, 11, '2023-08-23', 'done', 'Ocena laboratorium podstaw miernictwa'),
+       (11, 12, '2023-08-23', 'notdone', 'Ocena laboratorium metod numerycznych');
 
 INSERT INTO QUESTION (ID, SURVEY_ID, TEXT, TYPE)
 VALUES (11, 11, 'Czy ci sie podobało', 'Jednokrotna'),

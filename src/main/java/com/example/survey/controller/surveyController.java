@@ -31,6 +31,17 @@ public class surveyController {
         return new ResponseEntity<>(survey, HttpStatus.OK);
     }
 
+    @PutMapping("/{user_id}/survey")
+    public ResponseEntity<Survey> createSurvey(@RequestBody Survey surveyRequest, @PathVariable long user_id) {
+        surveyRequest.setUser(usersRepository.findById(user_id));
+        surveyRequest.setId(null);
+        long millis = System.currentTimeMillis();
+        java.sql.Date date = new java.sql.Date(millis);
+        surveyRequest.setCreated_at(date);
+        surveyRepository.save(surveyRequest);
+        return new ResponseEntity<>(surveyRequest, HttpStatus.CREATED);
+    }
+
     @GetMapping("/survey/{id}")
     public ResponseEntity<Survey> getSurveyById(@PathVariable int id) {
         Survey survey = surveyRepository.findById(id);
@@ -47,11 +58,4 @@ public class surveyController {
     }
 
 
-    @PutMapping("/{user_id}/survey")
-    public ResponseEntity<Survey> createSurvey(@RequestBody Survey surveyRequest, @PathVariable long user_id) {
-        surveyRequest.setUser(usersRepository.findById(user_id));
-        surveyRequest.setId(null);
-        surveyRepository.save(surveyRequest);
-        return new ResponseEntity<>(surveyRequest, HttpStatus.CREATED);
-    }
 }
