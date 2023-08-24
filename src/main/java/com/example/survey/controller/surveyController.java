@@ -23,7 +23,7 @@ public class surveyController {
     }
 
     @GetMapping("/{user_id}/survey/")
-    public ResponseEntity<List<Survey>> getSurveyByUser(@PathVariable int user_id) {
+    public ResponseEntity<List<Survey>> getAllSurveyByUser(@PathVariable int user_id) {
         List<Survey> survey = surveyRepository.findByUser_id(user_id);
         if (survey.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -44,8 +44,8 @@ public class surveyController {
         return new ResponseEntity<>(surveyRequest, HttpStatus.CREATED);
     }
 
-    @GetMapping("/survey/{id}")
-    public ResponseEntity<Survey> getSurveyById(@PathVariable int id) {
+    @GetMapping("/{user_id}/survey/{id}")
+    public ResponseEntity<Survey> getSurveyById(@PathVariable int id, @PathVariable int user_id) {
         Survey survey = surveyRepository.findById(id);
         if (survey == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -53,10 +53,10 @@ public class surveyController {
         return new ResponseEntity<>(survey, HttpStatus.OK);
     }
 
-    @DeleteMapping("/survey/{id}")
-    public ResponseEntity<HttpStatus> deleteSurvey(@PathVariable int id) {
+    @DeleteMapping("/{user_id}/survey/{id}")
+    public ResponseEntity<HttpStatus> deleteSurvey(@PathVariable int id, @PathVariable int user_id) {
         surveyRepository.deleteById((long) id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
