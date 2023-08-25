@@ -9,16 +9,17 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table
 public class Question {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @Column
     private String text;
-
     @Column
     private String type;
 
+    @Column
+    private int sequence;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "survey_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -29,11 +30,12 @@ public class Question {
     public Question() {
     }
 
-    public Question(long id, String text, String type, Survey survey) {
-        this.id = id;
-        this.text = text;
-        this.type = type;
-        this.survey = survey;
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
     }
 
     public long getId() {

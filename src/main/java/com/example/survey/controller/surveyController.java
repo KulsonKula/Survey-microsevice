@@ -59,5 +59,10 @@ public class surveyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PostMapping("/{user_id}/survey/{id}")
+    public ResponseEntity<HttpStatus> updateSurvey(@PathVariable int id, @PathVariable int user_id, @RequestBody Survey survey) {
+        survey.setUser(usersRepository.findById(user_id));
+        surveyRepository.save(survey);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
