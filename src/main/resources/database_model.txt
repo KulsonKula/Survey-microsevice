@@ -1,0 +1,37 @@
+Table users {
+  id integer [primary key]
+  username varchar
+  password varchar
+  email varchar
+}
+
+Table questionnaire
+ {
+  id integer [primary key]
+  user_id integer
+  title varchar
+  status varchar
+  created_at timestamp
+}
+
+Table questions{
+  id integet [primary key]
+  questionnaire_id integer
+  type varchar
+  sequence integer
+  text varchar
+}
+Table answer{
+id integetr [primary key]
+question_id integer
+sequence intger
+text varchar
+data integer
+}
+
+Ref: questionnaire.user_id > users.id
+Ref: questions.questionnaire_id > questionnaire.id
+Ref: answer.question_id > questions.id
+
+
+https://dbdiagram.io/d
