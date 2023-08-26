@@ -5,10 +5,9 @@ import com.example.survey.repository.QuestionRepository;
 import com.example.survey.repository.SurveyRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -30,4 +29,65 @@ public class QuestionController {
         }
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
+
+    @DeleteMapping("{survey_id}/question/{id}")
+    public ResponseEntity<HttpStatus> deleteQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
+        if (!questionRepository.existsById(Long.valueOf(id))) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        questionRepository.deleteById(Long.valueOf(id));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @PutMapping("/{survey_id}/question/")
+    public ResponseEntity<HttpStatus> createQuestion(@PathVariable int survey_id, @RequestBody Question question) {
+        question.setSurvey(surveyRepository.findById(survey_id));
+        question.setId(null);
+        questionRepository.save(question);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/{survey_id}/question/{id}")
+    public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int survey_id, @PathVariable int id, @RequestBody Question question) {
+        if (questionRepository.findByIdAndSequence(id, question.getSequence()) != null) {
+            question.setSurvey(surveyRepository.findById(survey_id));
+            questionRepository.save(question);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+
+    @PostMapping("/{survey_id}/question/{id}/position/{position_number}")
+    public ResponseEntity<List<Question>> changeQuestionPosition(@PathVariable int survey_id, @PathVariable int id, @PathVariable int position_number) {
+        if (position_number == 0 || questionRepository.findById(id) == null || questionRepository.findBySurvey_id(survey_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
+        List<Question> newQuestions = null;
+        if (position_number > questionRepository.findById(id).getSequence()) {
+            newQuestions = questionRepository.findBySurvey_idAndSequenceBetween(survey_id, questionRepository.findById(id).getSequence() + 1, position_number);
+            Question question = questionRepository.findById(id);
+            for (Question q : newQuestions) {
+                q.setSequence(q.getSequence() - 1);
+                questionRepository.save(q);
+            }
+            question.setSequence(position_number);
+            questionRepository.save(question);
+
+        } else {
+            newQuestions = questionRepository.findBySurvey_idAndSequenceBetween(survey_id, position_number, questionRepository.findById(id).getSequence() - 1);
+            Question question = questionRepository.findById(id);
+            for (Question q : newQuestions) {
+                q.setSequence(q.getSequence() + 1);
+                questionRepository.save(q);
+            }
+            question.setSequence(position_number);
+            questionRepository.save(question);
+        }
+        return new ResponseEntity<>(newQuestions, HttpStatus.OK);
+    }
+
+
 }
