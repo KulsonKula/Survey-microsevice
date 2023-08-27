@@ -3,12 +3,14 @@ package com.example.survey.controller;
 import com.example.survey.model.Answer;
 import com.example.survey.repository.AnswerRepository;
 import com.example.survey.repository.QuestionRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Answer")
 @RestController
 @RequestMapping("/api/question")
 public class AnswerController {
@@ -60,9 +62,9 @@ public class AnswerController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping("/{question_id}/answers/edit/{id}")
-    public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int question_id, @PathVariable int id, @RequestBody Answer answer) {
-        if (answerRepository.findByIdAndSequence(id, answer.getSequence()) != null) {
+    @PostMapping("/{question_id}/answers/edit")
+    public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int question_id, @RequestBody Answer answer) {
+        if (answerRepository.findByIdAndSequence(answer.getId(), answer.getSequence()) != null) {
             answer.setQuestion(questionRepository.findById(question_id));
             answerRepository.save(answer);
             return new ResponseEntity<>(HttpStatus.OK);

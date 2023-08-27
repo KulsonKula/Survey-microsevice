@@ -3,12 +3,14 @@ package com.example.survey.controller;
 import com.example.survey.model.Question;
 import com.example.survey.repository.QuestionRepository;
 import com.example.survey.repository.SurveyRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Question")
 @RestController
 @RequestMapping("/api/survey")
 public class QuestionController {
@@ -58,16 +60,15 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/{survey_id}/question/edit/{id}")
-    public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int survey_id, @PathVariable int id, @RequestBody Question question) {
-        if (questionRepository.findByIdAndSequence(id, question.getSequence()) != null) {
+    @PostMapping("/{survey_id}/question/edit")
+    public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int survey_id, @RequestBody Question question) {
+        if (questionRepository.findByIdAndSequence(question.getId(), question.getSequence()) != null) {
             question.setSurvey(surveyRepository.findById(survey_id));
             questionRepository.save(question);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
 
     @PostMapping("/{survey_id}/question/{id}/position/{position_number}")
     public ResponseEntity<List<Question>> changeQuestionPosition(@PathVariable int survey_id, @PathVariable int id, @PathVariable int position_number) {

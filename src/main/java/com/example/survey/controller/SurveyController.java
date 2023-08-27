@@ -3,12 +3,14 @@ package com.example.survey.controller;
 import com.example.survey.model.Survey;
 import com.example.survey.repository.SurveyRepository;
 import com.example.survey.repository.UsersRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Survey")
 @RestController
 @RequestMapping("/api/user/")
 public class SurveyController {
@@ -59,8 +61,8 @@ public class SurveyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/{user_id}/survey/edit/{id}")
-    public ResponseEntity<HttpStatus> updateSurvey(@PathVariable int id, @PathVariable int user_id, @RequestBody Survey survey) {
+    @PostMapping("/{user_id}/survey/edit")
+    public ResponseEntity<HttpStatus> updateSurvey(@PathVariable int user_id, @RequestBody Survey survey) {
         survey.setUser(usersRepository.findById(user_id));
         surveyRepository.save(survey);
         return new ResponseEntity<>(HttpStatus.OK);
