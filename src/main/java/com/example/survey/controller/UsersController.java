@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class UsersController {
     private final UsersRepository usersRepository;
 
@@ -16,20 +16,20 @@ public class UsersController {
         this.usersRepository = usersRepository;
     }
 
-    @DeleteMapping("/{user_id}")
+    @DeleteMapping("/delete/{user_id}")
     public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Integer user_id) {
         usersRepository.deleteById(Long.valueOf(user_id));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/")
+    @PutMapping("/add")
     public ResponseEntity<Users> createUser(@RequestBody Users users) {
         users.setId(null);
         usersRepository.save(users);
         return new ResponseEntity<>(users, HttpStatus.CREATED);
     }
 
-    @GetMapping("/")
+    @GetMapping("/login")
     public ResponseEntity<Integer> getUser(@ParameterObject Users users) {
         Users newUsers = usersRepository.findByUsernameAndPassword(users.getUsername(), users.getPassword());
         if (newUsers == null) {
@@ -38,7 +38,7 @@ public class UsersController {
         return new ResponseEntity<>(newUsers.getId(), HttpStatus.OK);
     }
 
-    @PostMapping("/{user_id}")
+    @PostMapping("/edit/{user_id}")
     public ResponseEntity<HttpStatus> updateUser(@RequestBody Users users, @PathVariable int user_id) {
         users.setId(user_id);
         usersRepository.save(users);

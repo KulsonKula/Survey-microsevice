@@ -12,5 +12,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     List<Question> findBySurvey_id(int id);
 
+    List<Question> findBySurvey_idOrderBySurveyAsc(int id);
+
     List<Question> findBySurvey_idAndSequenceBetween(int survey, int min, int max);
+
 }

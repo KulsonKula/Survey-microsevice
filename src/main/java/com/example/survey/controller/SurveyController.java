@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user/")
 public class SurveyController {
 
     private final SurveyRepository surveyRepository;
@@ -22,7 +22,7 @@ public class SurveyController {
         this.usersRepository = usersRepository;
     }
 
-    @GetMapping("/{user_id}/survey/")
+    @GetMapping("/{user_id}/survey/all")
     public ResponseEntity<List<Survey>> getAllSurveyByUser(@PathVariable int user_id) {
         List<Survey> survey = surveyRepository.findByUser_id(user_id);
         if (survey.isEmpty()) {
@@ -31,7 +31,7 @@ public class SurveyController {
         return new ResponseEntity<>(survey, HttpStatus.OK);
     }
 
-    @PutMapping("/{user_id}/survey")
+    @PutMapping("/{user_id}/survey/add")
     public ResponseEntity<Survey> createSurvey(@RequestBody Survey surveyRequest, @PathVariable long user_id) {
         surveyRequest.setUser(usersRepository.findById(user_id));
         surveyRequest.setId(null);
@@ -44,7 +44,7 @@ public class SurveyController {
         return new ResponseEntity<>(surveyRequest, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{user_id}/survey/{id}")
+    @GetMapping("/{user_id}/survey/get/{id}")
     public ResponseEntity<Survey> getSurveyById(@PathVariable int id, @PathVariable int user_id) {
         Survey survey = surveyRepository.findById(id);
         if (survey == null) {
@@ -53,13 +53,13 @@ public class SurveyController {
         return new ResponseEntity<>(survey, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{user_id}/survey/{id}")
+    @DeleteMapping("/{user_id}/survey/delete/{id}")
     public ResponseEntity<HttpStatus> deleteSurvey(@PathVariable int id, @PathVariable int user_id) {
         surveyRepository.deleteById((long) id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/{user_id}/survey/{id}")
+    @PostMapping("/{user_id}/survey/edit/{id}")
     public ResponseEntity<HttpStatus> updateSurvey(@PathVariable int id, @PathVariable int user_id, @RequestBody Survey survey) {
         survey.setUser(usersRepository.findById(user_id));
         surveyRepository.save(survey);

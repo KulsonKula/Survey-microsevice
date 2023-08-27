@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/survey")
 public class QuestionController {
 
     QuestionRepository questionRepository;
@@ -22,16 +22,16 @@ public class QuestionController {
     }
 
 
-    @GetMapping("/{survey_id}/question")
+    @GetMapping("/{survey_id}/question/all")
     public ResponseEntity<List<Question>> findAllQuestion(@PathVariable int survey_id) {
-        List<Question> questions = questionRepository.findBySurvey_id(survey_id);
+        List<Question> questions = questionRepository.findBySurvey_idOrderBySurveyAsc(survey_id);
         if (questions.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
-    @GetMapping("/{survey_id}/question/{id}")
+    @GetMapping("/{survey_id}/question/get/{id}")
     public ResponseEntity<Question> findQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
         Question question = questionRepository.findById(id);
         if (question == null) {
@@ -40,7 +40,7 @@ public class QuestionController {
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{survey_id}/question/{id}")
+    @DeleteMapping("/{survey_id}/question/delete/{id}")
     public ResponseEntity<HttpStatus> deleteQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
         if (!questionRepository.existsById(Long.valueOf(id))) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -50,7 +50,7 @@ public class QuestionController {
     }
 
 
-    @PutMapping("/{survey_id}/question/")
+    @PutMapping("/{survey_id}/question/add")
     public ResponseEntity<HttpStatus> createQuestion(@PathVariable int survey_id, @RequestBody Question question) {
         question.setSurvey(surveyRepository.findById(survey_id));
         question.setId(null);
@@ -58,7 +58,7 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/{survey_id}/question/{id}")
+    @PostMapping("/{survey_id}/question/edit/{id}")
     public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int survey_id, @PathVariable int id, @RequestBody Question question) {
         if (questionRepository.findByIdAndSequence(id, question.getSequence()) != null) {
             question.setSurvey(surveyRepository.findById(survey_id));
