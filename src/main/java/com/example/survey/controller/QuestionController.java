@@ -21,7 +21,17 @@ public class QuestionController {
         this.surveyRepository = surveyRepository;
     }
 
-    @GetMapping("{survey_id}/question/{id}")
+
+    @GetMapping("/{survey_id}/question")
+    public ResponseEntity<List<Question>> findAllQuestion(@PathVariable int survey_id) {
+        List<Question> questions = questionRepository.findBySurvey_id(survey_id);
+        if (questions.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    @GetMapping("/{survey_id}/question/{id}")
     public ResponseEntity<Question> findQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
         Question question = questionRepository.findById(id);
         if (question == null) {
@@ -30,7 +40,7 @@ public class QuestionController {
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
 
-    @DeleteMapping("{survey_id}/question/{id}")
+    @DeleteMapping("/{survey_id}/question/{id}")
     public ResponseEntity<HttpStatus> deleteQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
         if (!questionRepository.existsById(Long.valueOf(id))) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -64,8 +74,8 @@ public class QuestionController {
         if (position_number == 0 || questionRepository.findById(id) == null || questionRepository.findBySurvey_id(survey_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        
-        List<Question> newQuestions = null;
+
+        List<Question> newQuestions;
         if (position_number > questionRepository.findById(id).getSequence()) {
             newQuestions = questionRepository.findBySurvey_idAndSequenceBetween(survey_id, questionRepository.findById(id).getSequence() + 1, position_number);
             Question question = questionRepository.findById(id);

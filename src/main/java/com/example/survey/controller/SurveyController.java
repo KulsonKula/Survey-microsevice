@@ -11,13 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class surveyController {
+public class SurveyController {
 
     private final SurveyRepository surveyRepository;
     private final UsersRepository usersRepository;
 
 
-    public surveyController(SurveyRepository surveyRepository, UsersRepository usersRepository) {
+    public SurveyController(SurveyRepository surveyRepository, UsersRepository usersRepository) {
         this.surveyRepository = surveyRepository;
         this.usersRepository = usersRepository;
     }
