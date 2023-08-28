@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Tag(name = "User")
 @RestController
 @RequestMapping("/api/user")
@@ -22,10 +24,11 @@ public class UsersController {
 
     @DeleteMapping("/delete/{user_id}")
     @Operation(
-            description = "Delete a specific User",
+            description = "Delete a specific User by ID",
+            summary = "Delete User",
             responses = {
                     @ApiResponse(
-                            description = "Succes",
+                            description = "Success",
                             responseCode = "200"
                     ),
                     @ApiResponse(
@@ -44,17 +47,35 @@ public class UsersController {
 
     @PutMapping("/add")
     @Operation(
-            description = "Add user to database"
+            description = "Add user to database, id will be generated automatically. Username and Password cannot be null, must be at least 5 characters, max 30. ",
+            summary = "Add user",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Username of Password are not valid",
+                            responseCode = "400"
+                    )
+            }
     )
-    public ResponseEntity<Users> createUser(@RequestBody Users users) {
+    public ResponseEntity<Integer> createUser(@RequestBody Users users) {
+        if (users.getPassword() == null || users.getUsername() == null || Objects.equals(users.getPassword(), "") || Objects.equals(users.getUsername(), "")) {
+            return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
+        }
+        if (users.getUsername().length() < 3 || users.getUsername().length() > 30 || users.getPassword().length() < 3 || users.getPassword().length() > 30) {
+            return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
+        }
         users.setId(null);
         usersRepository.save(users);
-        return new ResponseEntity<>(users, HttpStatus.CREATED);
+        return new ResponseEntity<>(users.getId(), HttpStatus.CREATED);
     }
 
     @GetMapping("/login")
     @Operation(
-            description = "Check if user with given username and password are in the database and return his ID"
+            description = "Check if user with given username and password are in the database and return his ID",
+            summary = "Check if user exist"
     )
     public ResponseEntity<Integer> getUser(@ParameterObject Users users) {
         Users newUsers = usersRepository.findByUsernameAndPassword(users.getUsername(), users.getPassword());
@@ -66,7 +87,9 @@ public class UsersController {
 
     @PostMapping("/edit")
     @Operation(
-            description = "Update user"
+            description = "Update user",
+            summary = "Update user"
+
     )
     public ResponseEntity<HttpStatus> updateUser(@RequestBody Users users) {
         usersRepository.save(users);

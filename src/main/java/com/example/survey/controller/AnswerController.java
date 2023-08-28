@@ -3,6 +3,7 @@ package com.example.survey.controller;
 import com.example.survey.model.Answer;
 import com.example.survey.repository.AnswerRepository;
 import com.example.survey.repository.QuestionRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,10 @@ public class AnswerController {
     }
 
     @GetMapping("/{question_id}/answers/all")
+    @Operation(
+            description = "",
+            summary = "Return all answers that belongs to question"
+    )
     public ResponseEntity<List<Answer>> getAllAnswers(@PathVariable int question_id) {
         List<Answer> answer = answerRepository.findByQuestion_idOrderBySequenceAsc(question_id);
         if (answer.isEmpty()) {
@@ -31,7 +36,10 @@ public class AnswerController {
         return new ResponseEntity<>(answer, HttpStatus.OK);
     }
 
-
+    @Operation(
+            description = "",
+            summary = "Return a specific answer"
+    )
     @GetMapping("/{question_id}/answers/get/{id}")
     public ResponseEntity<Answer> findById(@PathVariable int question_id, @PathVariable int id) {
         Answer answer = answerRepository.findById(id);
@@ -41,12 +49,20 @@ public class AnswerController {
         return new ResponseEntity<>(answer, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "",
+            summary = "Delete a specific answer"
+    )
     @DeleteMapping("/{question_id}/answers/delete/{id}")
     public ResponseEntity<HttpStatus> deleteById(@PathVariable int question_id, @PathVariable int id) {
         answerRepository.deleteById((long) id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Add answer do database, or if answer with specific text and question_id exist, increment data",
+            summary = "Add answer to database"
+    )
     @PutMapping("/{question_id}/answers/add")
     public ResponseEntity<HttpStatus> createAnswer(@PathVariable int question_id, @RequestBody Answer answer) {
 
@@ -62,6 +78,10 @@ public class AnswerController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(
+            description = "",
+            summary = "Edit answer"
+    )
     @PostMapping("/{question_id}/answers/edit")
     public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int question_id, @RequestBody Answer answer) {
         if (answerRepository.findByIdAndSequence(answer.getId(), answer.getSequence()) != null) {
@@ -72,6 +92,10 @@ public class AnswerController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @Operation(
+            description = "",
+            summary = "Increment data for specific answer"
+    )
     @PostMapping("/{question_id}/answers/edit/{id}/increment")
     public ResponseEntity<HttpStatus> increment(@PathVariable int question_id, @PathVariable int id) {
         Answer answer = answerRepository.findById(id);
@@ -82,10 +106,15 @@ public class AnswerController {
 
 
     @PostMapping("/{question_id}/answer/{id}/position/{position_number}")
+    @Operation(
+            description = "Change the answer's position to {position_number}. Change position of all question between answer's and given so that they fit ",
+            summary = "Change position of answer"
+    )
     public ResponseEntity<List<Answer>> changeAnswerPosition(@PathVariable int question_id, @PathVariable int id, @PathVariable int position_number) {
         if (position_number == 0 || answerRepository.findById(id) == null || answerRepository.findByQuestion_id(question_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         List<Answer> newAnswer;
         if (position_number > answerRepository.findById(id).getSequence()) {
             newAnswer = answerRepository.findByQuestion_idAndSequenceBetween(question_id, answerRepository.findById(id).getSequence() + 1, position_number);
@@ -106,7 +135,6 @@ public class AnswerController {
             answer.setSequence(position_number);
             answerRepository.save(answer);
         }
-
 
         return new ResponseEntity<>(newAnswer, HttpStatus.OK);
     }

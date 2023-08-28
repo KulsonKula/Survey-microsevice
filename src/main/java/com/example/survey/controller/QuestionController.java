@@ -3,6 +3,7 @@ package com.example.survey.controller;
 import com.example.survey.model.Question;
 import com.example.survey.repository.QuestionRepository;
 import com.example.survey.repository.SurveyRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,10 @@ public class QuestionController {
     }
 
 
+    @Operation(
+            description = "",
+            summary = "Get all questions that belongs to survey"
+    )
     @GetMapping("/{survey_id}/question/all")
     public ResponseEntity<List<Question>> findAllQuestion(@PathVariable int survey_id) {
         List<Question> questions = questionRepository.findBySurvey_idOrderBySurveyAsc(survey_id);
@@ -33,6 +38,10 @@ public class QuestionController {
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "",
+            summary = "Get a specific question"
+    )
     @GetMapping("/{survey_id}/question/get/{id}")
     public ResponseEntity<Question> findQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
         Question question = questionRepository.findById(id);
@@ -42,6 +51,10 @@ public class QuestionController {
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "",
+            summary = "Delete a specific question"
+    )
     @DeleteMapping("/{survey_id}/question/delete/{id}")
     public ResponseEntity<HttpStatus> deleteQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
         if (!questionRepository.existsById(Long.valueOf(id))) {
@@ -51,7 +64,10 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @Operation(
+            description = "",
+            summary = "Create a specific question"
+    )
     @PutMapping("/{survey_id}/question/add")
     public ResponseEntity<HttpStatus> createQuestion(@PathVariable int survey_id, @RequestBody Question question) {
         question.setSurvey(surveyRepository.findById(survey_id));
@@ -60,6 +76,10 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(
+            description = "",
+            summary = "Edit a specific survey"
+    )
     @PostMapping("/{survey_id}/question/edit")
     public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int survey_id, @RequestBody Question question) {
         if (questionRepository.findByIdAndSequence(question.getId(), question.getSequence()) != null) {
@@ -70,7 +90,12 @@ public class QuestionController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+
     @PostMapping("/{survey_id}/question/{id}/position/{position_number}")
+    @Operation(
+            description = "Change the question's position to {position_number}. Change position of all question between position's and given so that they fit ",
+            summary = "Change position of question"
+    )
     public ResponseEntity<List<Question>> changeQuestionPosition(@PathVariable int survey_id, @PathVariable int id, @PathVariable int position_number) {
         if (position_number == 0 || questionRepository.findById(id) == null || questionRepository.findBySurvey_id(survey_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
