@@ -23,7 +23,7 @@ public class AnswerController {
         this.questionRepository = questionRepository;
     }
 
-    @GetMapping("/{question_id}/answers/all")
+    @GetMapping("/{question_id}/answer/all")
     @Operation(
             description = "",
             summary = "Return all answers that belongs to question"
@@ -40,7 +40,7 @@ public class AnswerController {
             description = "",
             summary = "Return a specific answer"
     )
-    @GetMapping("/{question_id}/answers/get/{id}")
+    @GetMapping("/{question_id}/answer/get/{id}")
     public ResponseEntity<Answer> findById(@PathVariable int question_id, @PathVariable int id) {
         Answer answer = answerRepository.findById(id);
         if (answer == null) {
@@ -53,27 +53,26 @@ public class AnswerController {
             description = "",
             summary = "Delete a specific answer"
     )
-    @DeleteMapping("/{question_id}/answers/delete/{id}")
+    @DeleteMapping("/{question_id}/answer/delete/{id}")
     public ResponseEntity<HttpStatus> deleteById(@PathVariable int question_id, @PathVariable int id) {
         answerRepository.deleteById((long) id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(
-            description = "Add answer do database, or if answer with specific text and question_id exist, increment data",
+            description = "Dodaje odpwiedz do bazy danych, jezeli pozycja jest nie jest równa -1, jest ona ustawiana automatycznie. Pozycja równa -1 jest zarezerwowana dla odpowiedzi na pytania otwarte. ",
             summary = "Add answer to database"
     )
-    @PutMapping("/{question_id}/answers/add")
+    @PutMapping("/{question_id}/answer/add")
     public ResponseEntity<HttpStatus> createAnswer(@PathVariable int question_id, @RequestBody Answer answer) {
 
-        Answer newAnswer = answerRepository.findByTextAndQuestion_id(answer.getText(), question_id);
-        if (newAnswer != null) {
-            newAnswer.setData(newAnswer.getData() + 1);
-            answerRepository.save(newAnswer);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
         answer.setId(null);
         answer.setQuestion(questionRepository.findById(question_id));
+        if (answer.getSequence() == -1) {
+            answerRepository.save(answer);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        answer.setSequence(answerRepository.findByQuestion_IdOrderBySequenceDesc(question_id).get(0).getSequence() + 1);
         answerRepository.save(answer);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -82,7 +81,7 @@ public class AnswerController {
             description = "",
             summary = "Edit answer"
     )
-    @PostMapping("/{question_id}/answers/edit")
+    @PostMapping("/{question_id}/answer/edit")
     public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int question_id, @RequestBody Answer answer) {
         if (answerRepository.findByIdAndSequence(answer.getId(), answer.getSequence()) != null) {
             answer.setQuestion(questionRepository.findById(question_id));
@@ -96,7 +95,7 @@ public class AnswerController {
             description = "",
             summary = "Increment data for specific answer"
     )
-    @PostMapping("/{question_id}/answers/edit/{id}/increment")
+    @PostMapping("/{question_id}/answer/edit/{id}/increment")
     public ResponseEntity<HttpStatus> increment(@PathVariable int question_id, @PathVariable int id) {
         Answer answer = answerRepository.findById(id);
         answer.setData(answer.getData() + 1);

@@ -9,13 +9,13 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     List<Answer> findByQuestion_id(int survey_id);
 
-    List<Answer> findByQuestion_idOrderBySequenceAsc(int survey_id);
+    List<Answer> findByQuestion_idOrderBySequenceAsc(int question_id);
 
     Answer findById(int id);
 
     Answer findByIdAndSequence(Integer id, int sequence);
 
-    Answer findByTextAndQuestion_id(String text, int question_id);
+    List<Answer> findByQuestion_IdOrderBySequenceDesc(int question_id);
 
     List<Answer> findByQuestion_idAndSequenceBetween(int question, int min, int max);
 }
