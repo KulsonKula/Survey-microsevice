@@ -17,8 +17,8 @@ public class TestController {
             summary = "Test for GET api"
     )
     @GetMapping("api/test")
-    public ResponseEntity<HttpStatus> connectionTestGET() {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Integer> connectionTestGET() {
+        return new ResponseEntity<>(4, HttpStatus.OK);
     }
 
     @Operation(
@@ -47,5 +47,5 @@ public class TestController {
     public ResponseEntity<HttpStatus> connectionTestPUT() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
+
 }
