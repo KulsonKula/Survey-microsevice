@@ -66,6 +66,7 @@ public class AnswerController {
     @PutMapping("/{question_id}/answer/add")
     public ResponseEntity<HttpStatus> createAnswer(@PathVariable int question_id, @RequestBody Answer answer) {
 
+        answer.setData(0);
         answer.setId(null);
         answer.setQuestion(questionRepository.findById(question_id));
         if (answer.getSequence() == -1) {
@@ -106,7 +107,7 @@ public class AnswerController {
 
     @PostMapping("/{question_id}/answer/{id}/position/{position_number}")
     @Operation(
-            description = "Change the answer's position to {position_number}. Change position of all question between answer's and given so that they fit ",
+            description = "Change the answer's position to {position_number}. Change position of all question between answer's and given so that they fit, if {posision_number} is bigger then highest numnber in survey, it will be automaticed set to max  + 1 ",
             summary = "Change position of answer"
     )
     public ResponseEntity<List<Answer>> changeAnswerPosition(@PathVariable int question_id, @PathVariable int id, @PathVariable int position_number) {
