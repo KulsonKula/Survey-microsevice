@@ -110,32 +110,34 @@ public class AnswerController {
             description = "Change the answer's position to {position_number}. Change position of all question between answer's and given so that they fit, if {posision_number} is bigger then highest numnber in survey, it will be automaticed set to max  + 1 ",
             summary = "Change position of answer"
     )
-    public ResponseEntity<List<Answer>> changeAnswerPosition(@PathVariable int question_id, @PathVariable int id, @PathVariable int position_number) {
-        if (position_number == 0 || answerRepository.findById(id) == null || answerRepository.findByQuestion_id(question_id).isEmpty()) {
+    public ResponseEntity<HttpStatus> changeAnswerPosition(@PathVariable int question_id, @PathVariable int id, @PathVariable int position_number) {
+        if (position_number <= 0 || answerRepository.findById(id) == null || answerRepository.findByQuestion_id(question_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        int i;
+        Answer answer = answerRepository.findById(id);
         List<Answer> newAnswer;
+
         if (position_number > answerRepository.findById(id).getSequence()) {
             newAnswer = answerRepository.findByQuestion_idAndSequenceBetween(question_id, answerRepository.findById(id).getSequence() + 1, position_number);
-            Answer answer = answerRepository.findById(id);
-            for (Answer a : newAnswer) {
-                a.setSequence(a.getSequence() - 1);
-                answerRepository.save(a);
-            }
-            answer.setSequence(position_number);
-            answerRepository.save(answer);
+            i = -1;
         } else {
             newAnswer = answerRepository.findByQuestion_idAndSequenceBetween(question_id, position_number, answerRepository.findById(id).getSequence() - 1);
-            Answer answer = answerRepository.findById(id);
-            for (Answer a : newAnswer) {
-                a.setSequence(a.getSequence() + 1);
-                answerRepository.save(a);
-            }
-            answer.setSequence(position_number);
-            answerRepository.save(answer);
+            i = 1;
+        }
+        for (Answer a : newAnswer) {
+            a.setSequence(a.getSequence() + i);
+            answerRepository.save(a);
         }
 
-        return new ResponseEntity<>(newAnswer, HttpStatus.OK);
+        int max_position = answerRepository.findByQuestion_IdOrderBySequenceDesc(question_id).get(0).getSequence();
+        if (position_number > max_position) {
+            answer.setSequence(max_position + 1);
+        } else {
+            answer.setSequence(position_number);
+        }
+        answerRepository.save(answer);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
