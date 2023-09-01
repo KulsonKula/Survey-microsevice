@@ -4,6 +4,7 @@ import com.example.survey.model.Question;
 import com.example.survey.repository.QuestionRepository;
 import com.example.survey.repository.SurveyRepository;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,17 @@ public class QuestionController {
 
     @Operation(
             description = "",
-            summary = "Get all questions that belongs to survey"
+            summary = "Get all questions that belongs to survey",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Cant find question",
+                            responseCode = "204"
+                    )
+            }
     )
     @GetMapping("/{survey_id}/question/all")
     public ResponseEntity<List<Question>> findAllQuestion(@PathVariable int survey_id) {
@@ -40,7 +51,17 @@ public class QuestionController {
 
     @Operation(
             description = "",
-            summary = "Get a specific question"
+            summary = "Get a specific question",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Cant find question",
+                            responseCode = "204"
+                    )
+            }
     )
     @GetMapping("/{survey_id}/question/get/{id}")
     public ResponseEntity<Question> findQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
@@ -53,7 +74,18 @@ public class QuestionController {
 
     @Operation(
             description = "",
-            summary = "Delete a specific question"
+            summary = "Delete a specific question",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Cant find question",
+                            responseCode = "404"
+                    )
+            }
+
     )
     @DeleteMapping("/{survey_id}/question/delete/{id}")
     public ResponseEntity<HttpStatus> deleteQuestionById(@PathVariable int survey_id, @PathVariable Integer id) {
@@ -66,7 +98,13 @@ public class QuestionController {
 
     @Operation(
             description = "",
-            summary = "Create a specific question"
+            summary = "Create a specific question",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    )
+            }
     )
     @PutMapping("/{survey_id}/question/add")
     public ResponseEntity<HttpStatus> createQuestion(@PathVariable int survey_id, @RequestBody Question question) {
@@ -78,7 +116,17 @@ public class QuestionController {
 
     @Operation(
             description = "",
-            summary = "Edit a specific survey"
+            summary = "Edit a specific survey",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Bad request",
+                            responseCode = "400"
+                    )
+            }
     )
     @PostMapping("/{survey_id}/question/edit")
     public ResponseEntity<HttpStatus> updateQuestion(@PathVariable int survey_id, @RequestBody Question question) {
@@ -125,6 +173,4 @@ public class QuestionController {
         questionRepository.save(question);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }

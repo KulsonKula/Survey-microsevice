@@ -17,7 +17,7 @@ public class Survey {
     private Integer id;
     @Column
     @NotNull
-    @Size(min = 3, max = 255)
+    @Size(min = 5)
     private String title;
 
     @Column
