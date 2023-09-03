@@ -110,11 +110,18 @@ public class SurveyController {
                     @ApiResponse(
                             description = "Success",
                             responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Cant find survey",
+                            responseCode = "204"
                     )
             }
     )
     @DeleteMapping("/{user_id}/survey/delete/{id}")
     public ResponseEntity<HttpStatus> deleteSurvey(@PathVariable int id, @PathVariable int user_id) {
+        if (surveyRepository.findById(user_id) == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         surveyRepository.deleteById((long) id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

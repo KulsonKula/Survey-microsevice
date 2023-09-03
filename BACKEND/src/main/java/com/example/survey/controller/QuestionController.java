@@ -142,7 +142,16 @@ public class QuestionController {
     @PostMapping("/{survey_id}/question/{id}/position/{position_number}")
     @Operation(
             description = "Change the question's position to {position_number}. Change position of all question between position's and given so that they fit ",
-            summary = "Change position of question"
+            summary = "Change position of question",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Bad request",
+                            responseCode = "400"
+                    )}
     )
     public ResponseEntity<HttpStatus> changeQuestionPosition(@PathVariable int survey_id, @PathVariable int id, @PathVariable int position_number) {
         if (position_number <= 0 || questionRepository.findById(id) == null || questionRepository.findBySurvey_id(survey_id).isEmpty()) {
