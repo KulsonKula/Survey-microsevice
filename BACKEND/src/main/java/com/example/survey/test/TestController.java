@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class TestController {
 
     @Operation(
-            description = "",
+            description = "TEST",
             summary = "Test for GET api"
     )
     @GetMapping("api/test")

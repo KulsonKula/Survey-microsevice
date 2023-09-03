@@ -3,6 +3,8 @@ package com.example.survey.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,9 +17,11 @@ public class Answer {
     private Integer id;
 
     @Column
+    @Positive
     private int sequence;
 
     @Column
+    @NotNull
     private String text;
 
     @Column
