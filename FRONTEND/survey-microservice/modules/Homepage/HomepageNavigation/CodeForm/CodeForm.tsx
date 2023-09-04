@@ -22,7 +22,7 @@ export const CodeForm = () => {
     >
       <FormRow label="Or enter a survey code" id="surveyCode">
         <input
-          className="rounded-md px-3 py-1.5 shadow-md text-purple-950"
+          className="rounded-md bg-fuchsia-100 px-3 py-1.5 shadow-md text-fuchsia-950"
           type="text"
           id="surveyCode"
           {...register("surveyCode", { required: false })}
