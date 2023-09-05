@@ -22,7 +22,6 @@ public class UsersController {
         this.usersRepository = usersRepository;
     }
 
-    @DeleteMapping("/delete/{user_id}")
     @Operation(
             description = "Delete a specific User by ID",
             summary = "Delete User",
@@ -37,6 +36,7 @@ public class UsersController {
                     )
             }
     )
+    @DeleteMapping("/delete/{user_id}")
     public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Integer user_id) {
         if (usersRepository.findById(user_id) == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -45,7 +45,6 @@ public class UsersController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/add")
     @Operation(
             description = "Add user to database, id will be generated automatically. Username and Password cannot be null, must be at least 5 characters, max 30. ",
             summary = "Add user",
@@ -60,23 +59,31 @@ public class UsersController {
                     )
             }
     )
+    @PutMapping("/add")
     public ResponseEntity<Integer> createUser(@RequestBody Users users) {
-        if (users.getPassword() == null || users.getUsername() == null || Objects.equals(users.getPassword(), "") || Objects.equals(users.getUsername(), "")) {
-            return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
+        if (validatedUser(users)) {
+            users.setId(null);
+            usersRepository.save(users);
+            return new ResponseEntity<>(users.getId(), HttpStatus.CREATED);
         }
-        if (users.getUsername().length() < 3 || users.getUsername().length() > 30 || users.getPassword().length() < 3 || users.getPassword().length() > 30) {
-            return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
-        }
-        users.setId(null);
-        usersRepository.save(users);
-        return new ResponseEntity<>(users.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/login")
     @Operation(
             description = "Check if user with given username and password are in the database and return his ID",
-            summary = "Check if user exist"
+            summary = "Check if user exist",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "User doesnt exist",
+                            responseCode = "404"
+                    )
+            }
     )
+    @GetMapping("/login")
     public ResponseEntity<Integer> getUser(@ParameterObject Users users) {
         Users newUsers = usersRepository.findByUsernameAndPassword(users.getUsername(), users.getPassword());
         if (newUsers == null) {
@@ -85,14 +92,41 @@ public class UsersController {
         return new ResponseEntity<>(newUsers.getId(), HttpStatus.OK);
     }
 
-    @PostMapping("/edit")
     @Operation(
             description = "Update user",
-            summary = "Update user"
-
+            summary = "Update user",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "User doesnt exist",
+                            responseCode = "404"
+                    ),
+                    @ApiResponse(
+                            description = "Username of Password are not valid",
+                            responseCode = "400"
+                    )
+            }
     )
+    @PostMapping("/edit")
     public ResponseEntity<HttpStatus> updateUser(@RequestBody Users users) {
-        usersRepository.save(users);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (usersRepository.findById((users.getId())) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (validatedUser(users)) {
+            usersRepository.save(users);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+
+    public boolean validatedUser(Users users) {
+        if (users.getPassword() == null || users.getUsername() == null || Objects.equals(users.getPassword(), "") || Objects.equals(users.getUsername(), "")) {
+            return false;
+        }
+        return users.getUsername().length() >= 3 && users.getUsername().length() <= 30 && users.getPassword().length() >= 5 && users.getPassword().length() <= 30;
     }
 }
