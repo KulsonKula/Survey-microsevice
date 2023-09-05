@@ -17,6 +17,8 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: #3b0764;
+  color: #faf5ff;
+  background: linear-gradient(to bottom right, #581c87, #a855f7);
+  background-size: cover;
+  background-attachment: fixed;
 }

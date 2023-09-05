@@ -6,7 +6,7 @@ type FormRowProps = {
 
 export function FormRow({ label, children, id }: FormRowProps) {
   return (
-    <div className="flex flex-col gap-3 px-0 py-5">
+    <div className="mx-6 flex flex-col gap-3 px-0 py-5">
       {label && (
         <label htmlFor={id} className="text-sm tracking-widest">
           {label}

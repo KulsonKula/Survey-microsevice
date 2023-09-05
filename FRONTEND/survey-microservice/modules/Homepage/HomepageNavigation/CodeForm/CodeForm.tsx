@@ -12,7 +12,7 @@ export const CodeForm = () => {
   } = useForm();
 
   const onSubmit = handleSubmit(({ surveyCode }) => {
-    router.push(`/${surveyCode}`);
+    router.push(`/survey/${surveyCode}`);
   });
 
   return (
