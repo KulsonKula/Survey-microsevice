@@ -8,11 +8,9 @@ export default function LoginPage() {
         {
           //!! tutaj <Text type='header'?></Text>
         }
-        <h1 className="text-xl text-center">
-          To create your own survey, log into an existing account or create a
-          new one
-        </h1>
+        <h1 className="text-3xl ml-3 tracking-wider">Start creating surveys</h1>
         <LoginForm />
+        <div className="bg-fuchsia-50 h-2"></div>
         <RegisterForm />
       </div>
     </main>

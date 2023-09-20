@@ -1,5 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { login } from "./apiUseLogin";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 type User = {
   username: string;
@@ -7,10 +9,14 @@ type User = {
 };
 
 export const useLogin = () => {
+  const router = useRouter();
+
   return useMutation({
     mutationFn: ({ username, password }: User) => login({ username, password }),
     onSuccess: () => {
-      console.log("success");
+      router.refresh();
+      router.push("/creator");
+      toast.success("Successfully logged in");
     },
     onError: (err) => {
       console.log("ERROR", err);

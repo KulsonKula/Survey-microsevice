@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { ReactQueryProvider } from "./ReactQueryProvider";
+import { Toaster } from "react-hot-toast";
 
 const roboto = Roboto({ weight: "300", subsets: ["cyrillic"] });
 
@@ -18,7 +19,30 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ReactQueryProvider>
+          {" "}
+          <Toaster
+            position="top-center"
+            gutter={12}
+            containerStyle={{ margin: "8px" }}
+            toastOptions={{
+              success: {
+                duration: 2000,
+              },
+              error: {
+                duration: 5000,
+              },
+              style: {
+                fontSize: "16px",
+                maxWidth: "500px",
+                padding: "16px 24px",
+                backgroundColor: "#f3e8ff",
+                color: "#3b0764",
+              },
+            }}
+          />
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );
