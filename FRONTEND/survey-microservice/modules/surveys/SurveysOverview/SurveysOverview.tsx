@@ -17,7 +17,7 @@ export const SurveysOverview = () => {
 
   return (
     <div>
-      <h1 className="my-12 uppercase text-3xl tracking-widest text-center">
+      <h1 className="mt-24 mb-12 uppercase text-3xl tracking-widest text-center">
         Your surveys
       </h1>
       <div className="flex flex-col space-y-4">

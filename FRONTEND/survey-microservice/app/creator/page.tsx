@@ -2,7 +2,7 @@ import { SurveyCreator } from "@/modules/surveys/Creators/SurveyCreator/SurveyCr
 
 export default function CreatorPage() {
   return (
-    <main className="flex flex-col space-y-10">
+    <main className="flex flex-col">
       <SurveyCreator />
     </main>
   );

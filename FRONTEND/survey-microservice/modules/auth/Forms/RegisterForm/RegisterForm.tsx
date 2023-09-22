@@ -3,15 +3,23 @@ import { useForm } from "react-hook-form";
 
 import { FormRow } from "@/modules/ui/Form/FormRow/FormRow";
 import { Button } from "../../../ui/Button/Button";
+import { useSignup } from "../../user/hooks/useSignup/useSignup";
 
 export function RegisterForm() {
+  const signup = useSignup();
+
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
-  const onSubmit = handleSubmit(() => console.log("submitted"));
+  const onSubmit = handleSubmit(
+    ({ username, passwordSignup, passwordConfirm }) => {
+      console.log(username, passwordSignup, passwordConfirm);
+      signup.mutate({ username, password: passwordSignup, passwordConfirm });
+    }
+  );
 
   return (
     <div>
