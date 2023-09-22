@@ -2,6 +2,7 @@
 import { Button } from "@/modules/ui/Button/Button";
 import { useLogin } from "@/modules/auth/user/hooks/useLogin/useLogin";
 import { api } from "@/services/axios/axiosConfig";
+import { toast } from "react-hot-toast";
 
 const TEST_URL = "/api/test";
 
@@ -61,6 +62,9 @@ export default function TestPage() {
       </Button>
       <Button onClick={loginAPI} size="lg">
         TestLOGIN
+      </Button>
+      <Button onClick={() => toast.success("Toast success")} size="lg">
+        TestTOAST
       </Button>
     </div>
   );
