@@ -15,6 +15,10 @@ public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column
+    @NotNull
+    private String accessCode;
     @Column
     @NotNull
     @Size(min = 5)
@@ -35,7 +39,9 @@ public class Survey {
     public Survey() {
     }
 
-    public Survey(String title, String status, Date created_at, Users user) {
+    public Survey(Integer id, String accessCode, String title, String status, Date created_at, Users user) {
+        this.id = id;
+        this.accessCode = accessCode;
         this.title = title;
         this.status = status;
         this.created_at = created_at;
@@ -82,4 +88,11 @@ public class Survey {
         this.user = user;
     }
 
+    public String getAccessCode() {
+        return accessCode;
+    }
+
+    public void setAccessCode(String accessCode) {
+        this.accessCode = accessCode;
+    }
 }

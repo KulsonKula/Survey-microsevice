@@ -6,10 +6,12 @@ import com.example.survey.repository.UsersRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Objects;
 
@@ -73,6 +75,10 @@ public class SurveyController {
             long millis = System.currentTimeMillis();
             java.sql.Date date = new java.sql.Date(millis);
             surveyRequest.setCreated_at(date);
+
+            char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")).toCharArray();
+            String accessCode = RandomStringUtils.random(11, 0, possibleCharacters.length - 1, false, false, possibleCharacters, new SecureRandom());
+            surveyRequest.setAccessCode((accessCode));
 
             surveyRepository.save(surveyRequest);
             return new ResponseEntity<>(surveyRequest, HttpStatus.CREATED);
@@ -150,7 +156,24 @@ public class SurveyController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+
+    @GetMapping("/{user_id}/survey/code/{accessCode}")
+    public ResponseEntity<Survey> getSurveyByCode(@PathVariable int user_id, @PathVariable String accessCode) {
+
+        if (validateAccessCode(accessCode)) {
+            Survey survey = surveyRepository.findByAccessCode(accessCode);
+            if (survey != null) {
+                return new ResponseEntity<>(survey, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     public boolean validateSurvey(Survey survey) {
         return survey.getTitle().length() >= 5 && survey.getStatus() != null && !Objects.equals(survey.getStatus(), "");
+    }
+
+    public boolean validateAccessCode(String accessCode) {
+        return !Objects.equals(accessCode, "") && accessCode != null;
     }
 }
