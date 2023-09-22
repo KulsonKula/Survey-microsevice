@@ -19,8 +19,8 @@ export const LoginForm = () => {
   });
 
   return (
-    <>
-      <h2 className="text-xl ml-4">Log into an existing account</h2>
+    <div>
+      <h2 className="text-xl sm:ml-0 ml-4">Log into an existing account</h2>
       <form onSubmit={onSubmit}>
         <FormRow label="USERNAME" id="username">
           <input
@@ -53,6 +53,6 @@ export const LoginForm = () => {
           </Button>
         </FormRow>
       </form>
-    </>
+    </div>
   );
 };

@@ -14,8 +14,8 @@ export function RegisterForm() {
   const onSubmit = handleSubmit(() => console.log("submitted"));
 
   return (
-    <>
-      <h2 className="text-xl ml-4">Create a new account</h2>
+    <div>
+      <h2 className="text-xl ml-4 sm:ml-0">Create a new account</h2>
       <form onSubmit={onSubmit}>
         <FormRow id="username" label="USERNAME">
           <input
@@ -99,6 +99,6 @@ export function RegisterForm() {
           </Button>
         </FormRow>
       </form>
-    </>
+    </div>
   );
 }

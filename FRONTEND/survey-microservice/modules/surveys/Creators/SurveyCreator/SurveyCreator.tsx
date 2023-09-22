@@ -1,3 +1,4 @@
+"use client";
 import { QuestionCreator } from "../QuestionCreator/QuestionCreator";
 
 export const SurveyCreator = () => {

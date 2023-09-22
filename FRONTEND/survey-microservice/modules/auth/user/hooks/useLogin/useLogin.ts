@@ -20,6 +20,7 @@ export const useLogin = () => {
     },
     onError: (err) => {
       console.log("ERROR", err);
+      toast.error("Email and password do not match!");
     },
   });
 };

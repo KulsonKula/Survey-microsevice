@@ -42,8 +42,8 @@ const variants: ClassNames = {
   primary: "bg-purple-700 text-purple-200 enabled:hover:bg-purple-600",
   secondary: "bg-purple-300 text-purple-950 enabled:hover:bg-purple-200",
   link: "text-fuchsia-200 bg-transparent enabled:hover:bg-transparent enabled:hover:underline",
-  danger:
-    "bg-red-700 text-red-100 enabled:hover:bg-red-600  border border-red-50",
+  danger: "bg-red-700 text-red-100 enabled:hover:bg-red-600 ",
+  accept: "bg-green-200 text-green-600 border-green-400 border",
 };
 export const BaseButton = (props: BaseButtonProps) => {
   const { variant = "primary", size = "md", rounded = true } = props;
