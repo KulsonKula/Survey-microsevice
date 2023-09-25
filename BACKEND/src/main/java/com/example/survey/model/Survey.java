@@ -29,7 +29,7 @@ public class Survey {
     private String status;
 
     @Column
-    private Date created_at;
+    private Date createdAt;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -39,12 +39,12 @@ public class Survey {
     public Survey() {
     }
 
-    public Survey(Integer id, String accessCode, String title, String status, Date created_at, Users user) {
+    public Survey(Integer id, String accessCode, String title, String status, Date createdAt, Users user) {
         this.id = id;
         this.accessCode = accessCode;
         this.title = title;
         this.status = status;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
         this.user = user;
     }
 
@@ -72,12 +72,12 @@ public class Survey {
         this.status = status;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Date created_at) {
+        this.createdAt = created_at;
     }
 
     public Users getUser() {
