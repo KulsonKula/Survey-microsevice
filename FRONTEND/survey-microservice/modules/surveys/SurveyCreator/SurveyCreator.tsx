@@ -1,6 +1,6 @@
 "use client";
+import { QuestionCreator } from "@/modules/questions/QuestionCreator/QuestionCreator";
 import { Button } from "@/modules/ui/Button/Button";
-import { QuestionCreator } from "../QuestionCreator/QuestionCreator";
 import { useState } from "react";
 
 export const SurveyCreator = () => {

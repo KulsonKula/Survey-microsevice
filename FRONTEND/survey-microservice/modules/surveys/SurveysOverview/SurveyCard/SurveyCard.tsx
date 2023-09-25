@@ -5,7 +5,7 @@ type Survey = {
   accessCode: string;
   title: string;
   status: string;
-  created_at: string;
+  createdAt: string;
 };
 
 type SurveyCardProps = {

@@ -5,5 +5,5 @@ export const useGetSurveyReturnSchema = z.object({
   accessCode: z.string(),
   title: z.string(),
   status: z.string(),
-  created_at: z.string(),
+  createdAt: z.string(),
 });

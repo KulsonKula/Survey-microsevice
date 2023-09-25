@@ -6,6 +6,6 @@ export const useGetAllUserSurveysReturnSchema = z.array(
     accessCode: z.string(),
     status: z.string(),
     title: z.string(),
-    created_at: z.string(),
+    createdAt: z.string(),
   })
 );

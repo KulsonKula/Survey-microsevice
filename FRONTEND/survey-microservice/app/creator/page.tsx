@@ -1,4 +1,4 @@
-import { SurveyCreator } from "@/modules/surveys/Creators/SurveyCreator/SurveyCreator";
+import { SurveyCreator } from "@/modules/surveys/SurveyCreator/SurveyCreator";
 
 export default function CreatorPage() {
   return (
