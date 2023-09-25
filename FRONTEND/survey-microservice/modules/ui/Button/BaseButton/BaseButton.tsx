@@ -47,11 +47,14 @@ const variants: ClassNames = {
 };
 export const BaseButton = (props: BaseButtonProps) => {
   const { variant = "primary", size = "md", rounded = true } = props;
-  const className = clsx("font-semibold transition-all duration-300", {
-    [variants[variant]]: props.variant,
-    [sizes[size]]: props.size,
-    "rounded-xl": rounded,
-  });
+  const className = clsx(
+    "disabled:opacity-50 font-semibold transition-all duration-300",
+    {
+      [variants[variant]]: props.variant,
+      [sizes[size]]: props.size,
+      "rounded-xl": rounded,
+    }
+  );
   if (props.as === "a") {
     return (
       <Link href={props.href} className={className}>
