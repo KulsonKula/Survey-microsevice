@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Tag(name = "Survey")
 @RestController
-@RequestMapping("/api/user/")
+@RequestMapping("/api")
 public class SurveyController {
 
     private final SurveyRepository surveyRepository;
@@ -43,7 +43,7 @@ public class SurveyController {
                     )
             }
     )
-    @GetMapping("/{user_id}/survey/all")
+    @GetMapping("/user/{user_id}/survey/all")
     public ResponseEntity<List<Survey>> getAllSurveyByUser(@PathVariable int user_id) {
         List<Survey> survey = surveyRepository.findByUser_id(user_id);
         if (survey.isEmpty()) {
@@ -66,7 +66,7 @@ public class SurveyController {
                     )
             }
     )
-    @PutMapping("/{user_id}/survey/add")
+    @PutMapping("/user/{user_id}/survey/add")
     public ResponseEntity<Survey> createSurvey(@RequestBody Survey surveyRequest, @PathVariable long user_id) {
         if (validateSurvey(surveyRequest)) {
             surveyRequest.setUser(usersRepository.findById(user_id));
@@ -100,7 +100,7 @@ public class SurveyController {
                     )
             }
     )
-    @GetMapping("/{user_id}/survey/get/{id}")
+    @GetMapping("/user/{user_id}/survey/get/{id}")
     public ResponseEntity<Survey> getSurveyById(@PathVariable int id, @PathVariable int user_id) {
         Survey survey = surveyRepository.findById(id);
         if (survey == null) {
@@ -123,7 +123,7 @@ public class SurveyController {
                     )
             }
     )
-    @DeleteMapping("/{user_id}/survey/delete/{id}")
+    @DeleteMapping("/user/{user_id}/survey/delete/{id}")
     public ResponseEntity<HttpStatus> deleteSurvey(@PathVariable int id, @PathVariable int user_id) {
         if (surveyRepository.findById(user_id) == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -146,7 +146,7 @@ public class SurveyController {
                     )
             }
     )
-    @PostMapping("/{user_id}/survey/edit")
+    @PostMapping("/user/{user_id}/survey/edit")
     public ResponseEntity<HttpStatus> updateSurvey(@PathVariable int user_id, @RequestBody Survey survey) {
         if (validateSurvey(survey)) {
             survey.setUser(usersRepository.findById(user_id));
@@ -157,8 +157,8 @@ public class SurveyController {
     }
 
 
-    @GetMapping("/{user_id}/survey/code/{accessCode}")
-    public ResponseEntity<Survey> getSurveyByCode(@PathVariable int user_id, @PathVariable String accessCode) {
+    @GetMapping("/survey/{accessCode}")
+    public ResponseEntity<Survey> getSurveyByCode(@PathVariable String accessCode) {
 
         if (validateAccessCode(accessCode)) {
             Survey survey = surveyRepository.findByAccessCode(accessCode);
