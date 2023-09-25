@@ -74,7 +74,7 @@ public class SurveyController {
 
             long millis = System.currentTimeMillis();
             java.sql.Date date = new java.sql.Date(millis);
-            surveyRequest.setCreated_at(date);
+            surveyRequest.setCreatedAt(date);
 
             char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")).toCharArray();
             String accessCode = RandomStringUtils.random(11, 0, possibleCharacters.length - 1, false, false, possibleCharacters, new SecureRandom());
